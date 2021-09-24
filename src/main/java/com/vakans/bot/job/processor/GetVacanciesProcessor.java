@@ -3,7 +3,7 @@ package com.vakans.bot.job.processor;
 import com.vakans.bot.job.data.Vacancy;
 import com.vakans.bot.job.data.Website;
 import com.vakans.bot.job.factory.WebsiteFactory;
-import com.vakans.bot.job.service.WebsiteService;
+import com.vakans.bot.job.service.website.WebsiteService;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 

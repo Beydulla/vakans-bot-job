@@ -1,16 +1,20 @@
-package com.vakans.bot.job.service;
+package com.vakans.bot.job.service.website;
 
 import com.vakans.bot.job.data.Vacancy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-public class BossAzService implements WebsiteService{
+public class BossAzService implements WebsiteService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(BossAzService.class);
 
     private final static String WEBSITE_URL = "https://boss.az/vacancies";
     private final static String COMPANY_ID = ".results-i-company";
@@ -21,19 +25,20 @@ public class BossAzService implements WebsiteService{
 
     @Override
     public List<Vacancy> getNewVacancies() {
-        System.out.println("boss.az vacancies");
-        return null;
+        final List<Vacancy> vacancies = new ArrayList<>();
+        try {
+            final Document doc = Jsoup.connect(WEBSITE_URL).get();
+            final Elements elements = doc.select(ELEMENTS_ID);
+            for (Element element : elements) {
+                vacancies.add(elementToVacancy(element));
+            }
+        } catch (final IOException exception) {
+            LOGGER.error(exception.getLocalizedMessage());
+        }
+        return vacancies;
     }
 
 
-
-    public List<Vacancy> scrapeWebsite() throws IOException {
-        Document doc = Jsoup.connect(WEBSITE_URL).get();
-
-        System.out.println(doc);
-        return null;
-
-    }
 
     public static void main(String[] args) throws IOException {
         final Document doc = Jsoup.connect(WEBSITE_URL).get();

@@ -1,7 +1,7 @@
 package com.vakans.bot.job.factory;
 
-import com.vakans.bot.job.service.BossAzService;
-import com.vakans.bot.job.service.WebsiteService;
+import com.vakans.bot.job.service.website.BossAzService;
+import com.vakans.bot.job.service.website.WebsiteService;
 import org.springframework.stereotype.Component;
 
 @Component

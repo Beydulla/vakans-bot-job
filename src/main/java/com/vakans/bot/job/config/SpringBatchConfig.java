@@ -4,7 +4,6 @@ import com.vakans.bot.job.data.Vacancy;
 import com.vakans.bot.job.data.Website;
 import com.vakans.bot.job.listener.SpringBatchJobCompletionListener;
 import com.vakans.bot.job.processor.GetVacanciesProcessor;
-import com.vakans.bot.job.reader.WebsiteListDbReader;
 import com.vakans.bot.job.writer.VacancyWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;

@@ -9,5 +9,6 @@ public class Vacancy {
     private String company;
     private int minimumSalary;
     private int maximumSalary;
+    private String vacancyLink;
 
 }

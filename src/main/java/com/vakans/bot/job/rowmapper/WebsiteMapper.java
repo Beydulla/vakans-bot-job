@@ -1,4 +1,4 @@
-package com.vakans.bot.job.mapper;
+package com.vakans.bot.job.rowmapper;
 
 import com.vakans.bot.job.data.Website;
 import org.springframework.jdbc.core.RowMapper;

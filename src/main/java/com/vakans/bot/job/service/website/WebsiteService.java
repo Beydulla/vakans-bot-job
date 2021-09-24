@@ -1,4 +1,4 @@
-package com.vakans.bot.job.service;
+package com.vakans.bot.job.service.website;
 
 import com.vakans.bot.job.data.Vacancy;
 
