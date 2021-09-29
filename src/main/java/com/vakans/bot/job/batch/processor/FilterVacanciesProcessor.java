@@ -26,9 +26,9 @@ public class FilterVacanciesProcessor implements ItemProcessor<List<Vacancy>, Li
         LOGGER.info("Getting list of filters");
         final List<Filter> filterList = filterService.getFilterList();
         LOGGER.info("{} filters fetched", filterList.size());
-        LOGGER.info("Generating messages...");
         final List<Message> messageList = new ArrayList<>();
         for(final Filter filter : filterList){
+            LOGGER.info("Checking match with filter: {}", filter.toString());
             final String[] arrayTag = filter.getTagsAsArray();
             for(final Vacancy vacancy : vacancies){
                 if(hasMatch(vacancy, filter, arrayTag)){
@@ -45,9 +45,11 @@ public class FilterVacanciesProcessor implements ItemProcessor<List<Vacancy>, Li
 
     private boolean hasMatch(final Vacancy vacancy, final Filter filter, final String[] tags){
         return Arrays.stream(tags).anyMatch(tag ->
-                vacancy.getTitle().contains(tag) || vacancy.getDescription().contains(tag))
-                && (vacancy.getMinimumSalary() > filter.getMinimumSalary() ||
-                vacancy.getMaximumSalary() > filter.getMinimumSalary()) &&
-                (vacancy.getCompany() == null || vacancy.getCompany().equalsIgnoreCase(filter.getCompany()));
+                vacancy.getTitle().toLowerCase().contains(tag.toLowerCase())
+                || vacancy.getDescription().toLowerCase().contains(tag.toLowerCase()))
+                && (vacancy.getMinimumSalary() >= filter.getMinimumSalary() ||
+                vacancy.getMaximumSalary() >= filter.getMinimumSalary()) &&
+                (filter.getCompany() == null || filter.getCompany().isEmpty()
+                        || vacancy.getCompany().equalsIgnoreCase(filter.getCompany()));
     }
 }

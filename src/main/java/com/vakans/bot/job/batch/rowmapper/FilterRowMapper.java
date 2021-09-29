@@ -12,7 +12,7 @@ public class FilterRowMapper implements RowMapper<Filter> {
     public Filter mapRow(final ResultSet resultSet, final int i) throws SQLException {
         final Filter filter = new Filter();
         filter.setTags(resultSet.getString("TAGS"));
-        filter.setCompany(resultSet.getString("COMPANY"));
+        filter.setCompany(resultSet.getString("EMPLOYER"));
         filter.setMaximumSalary(resultSet.getInt("MAXIMUM_SALARY"));
         filter.setMinimumSalary(resultSet.getInt("MINIMUM_SALARY"));
         filter.setTelegramChatId(resultSet.getLong("CHAT_ID"));

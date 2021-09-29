@@ -4,5 +4,5 @@ public interface TelegramDao {
 
     int countActiveConfirmationKey(final String confirmationKey);
 
-    void updateByConfirmationKey(final long chatId, final String confirmationKey);
+    int updateByConfirmationKey(final long chatId, final String confirmationKey);
 }

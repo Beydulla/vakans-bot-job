@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,10 +29,11 @@ public class TelegramDaoImpl implements TelegramDao{
     }
 
     @Override
-    public void updateByConfirmationKey(final long chatId, final String confirmationKey) {
+    @Transactional
+    public int updateByConfirmationKey(final long chatId, final String confirmationKey) {
         final Map<String,Object> paramMap = new ConcurrentHashMap<>();
         paramMap.put("CHAT_ID", chatId);
         paramMap.put("CONFIRMATION_KEY", confirmationKey);
-        jdbcTemplate.update(queryUpdateConfirmationKey, paramMap);
+        return jdbcTemplate.update(queryUpdateConfirmationKey, paramMap);
     }
 }

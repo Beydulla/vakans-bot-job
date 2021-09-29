@@ -10,11 +10,13 @@ import com.vakans.bot.job.polling.TelegramBot;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
 import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@EnableBatchProcessing
 public class SpringBatchConfig {
 
     @Autowired
@@ -58,7 +61,7 @@ public class SpringBatchConfig {
         return stepBuilderFactory.get("vacanciesStep").< Website, List<Message>>chunk(1)
                 .reader(websiteListDbReader())
                 .processor(compositeItemProcessor())
-                .writer(new VacancyWriter()).build();
+                .writer(vacancyWriter()).build();
     }
 
     @Bean
@@ -93,6 +96,10 @@ public class SpringBatchConfig {
         return itemProcessor;
     }
 
+    @Bean
+    public ItemWriter<List<Message>> vacancyWriter(){
+        return new VacancyWriter();
+    }
     @Bean
     public CommandLineRunner schedulingRunner() {
         return new CommandLineRunner() {
