@@ -1,5 +1,8 @@
 package com.vakans.bot.job.batch.service.website;
 
+import com.vakans.bot.job.batch.dao.LastVacancyDao;
+import com.vakans.bot.job.batch.dao.LastVacancyDaoImpl;
+import com.vakans.bot.job.batch.data.LastVacancy;
 import com.vakans.bot.job.batch.data.Vacancy;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +19,8 @@ public class BossAzService implements WebsiteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BossAzService.class);
 
+    private LastVacancyDao lastVacancyDao;
+
     private final static String WEBSITE_URL = "https://boss.az";
     private final static String VACANCIES_URL = "https://boss.az/vacancies";
     private final static String COMPANY_ID = ".results-i-company";
@@ -25,16 +30,32 @@ public class BossAzService implements WebsiteService {
     private final static String ELEMENTS_ID = ".results-i";
     private final static String LINK_ID = ".results-i-link";
 
+    public BossAzService(final LastVacancyDao lastVacancyDao){
+        this.lastVacancyDao = lastVacancyDao;
+    }
+
     @Override
     public List<Vacancy> getNewVacancies() {
         final List<Vacancy> vacancies = new ArrayList<>();
         try {
             final Document doc = Jsoup.connect(VACANCIES_URL).get();
             final Elements elements = doc.select(ELEMENTS_ID);
+            final LastVacancy lastVacancy = lastVacancyDao.getLastVacancyByWebsite(WEBSITE_URL);
             for (Element element : elements) {
                 final Vacancy vacancy = elementToVacancy(element);
-                LOGGER.info("Vacancy: {}", vacancy);
+                if(lastVacancy.getLink().equals(vacancy.getVacancyLink())){
+                    LOGGER.info("Last vacancy: {}", lastVacancy);
+                    if(vacancies.size() == 0){
+                        LOGGER.info("There was no new vacancy!");
+                    }else{
+                        final String lastVacancyLink = vacancies.get(0).getVacancyLink();
+                        LOGGER.info("Updating last vacancy: {}", lastVacancyLink);
+                        lastVacancyDao.updateLastVacancyByWebsite(WEBSITE_URL, lastVacancyLink);
+                    }
+                    break;
+                }
                 vacancies.add(vacancy);
+                LOGGER.info("Added vacancy to vacancies list: {}", vacancy);
             }
         } catch (final IOException exception) {
             LOGGER.error(exception.getLocalizedMessage());
@@ -62,8 +83,6 @@ public class BossAzService implements WebsiteService {
                 vacancy.setMaximumSalary(Integer.parseInt(salaryArray[1].trim().split(" ")[0].trim()));
             }
         }
-
-
         return vacancy;
     }
 

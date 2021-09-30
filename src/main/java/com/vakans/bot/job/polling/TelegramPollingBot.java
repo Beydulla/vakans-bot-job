@@ -11,9 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 
 @Component
-public class TelegramBot extends TelegramLongPollingBot {
+public class TelegramPollingBot extends TelegramLongPollingBot {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(TelegramBot.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TelegramPollingBot.class);
 
     @Autowired
     private TelegramService telegramService;

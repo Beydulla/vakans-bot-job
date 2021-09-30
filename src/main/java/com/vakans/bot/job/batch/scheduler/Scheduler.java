@@ -15,25 +15,25 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Scheduler {
-
-    @Autowired
-    private JobLauncher jobLauncher;
-
-    @Autowired
-    private Job vacancyJob;
-
-    @Autowired
-    private WebsiteFactory websiteFactory;
-
-    @Scheduled(cron = "0 */1 * * * ?")
-    public void run(){
-        try {
-            final JobParameters params = new JobParametersBuilder()
-                    .addString("JobID", String.valueOf(System.currentTimeMillis()))
-                    .toJobParameters();
-            jobLauncher.run(vacancyJob, params);
-        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
-            e.printStackTrace();
-        }
-    }
+//
+//    @Autowired
+//    private JobLauncher jobLauncher;
+//
+//    @Autowired
+//    private Job vacancyJob;
+//
+//    @Autowired
+//    private WebsiteFactory websiteFactory;
+//
+//    @Scheduled(cron = "0 */1 * * * ?")
+//    public void run(){
+//        try {
+//            final JobParameters params = new JobParametersBuilder()
+//                    .addString("JobID", String.valueOf(System.currentTimeMillis()))
+//                    .toJobParameters();
+//            jobLauncher.run(vacancyJob, params);
+//        } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

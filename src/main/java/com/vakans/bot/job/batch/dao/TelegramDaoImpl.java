@@ -29,7 +29,6 @@ public class TelegramDaoImpl implements TelegramDao{
     }
 
     @Override
-    @Transactional
     public int updateByConfirmationKey(final long chatId, final String confirmationKey) {
         final Map<String,Object> paramMap = new ConcurrentHashMap<>();
         paramMap.put("CHAT_ID", chatId);

@@ -6,7 +6,7 @@ import com.vakans.bot.job.batch.listener.SpringBatchJobCompletionListener;
 import com.vakans.bot.job.batch.processor.FilterVacanciesProcessor;
 import com.vakans.bot.job.batch.processor.GetVacanciesProcessor;
 import com.vakans.bot.job.batch.writer.VacancyWriter;
-import com.vakans.bot.job.polling.TelegramBot;
+import com.vakans.bot.job.polling.TelegramPollingBot;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
@@ -46,7 +46,7 @@ public class SpringBatchConfig {
     private DataSource dataSource;
 
     @Autowired
-    private TelegramBot telegramBot;
+    private TelegramPollingBot telegramPollingBot;
 
     @Bean
     public Job vacancyJob() {
@@ -106,7 +106,7 @@ public class SpringBatchConfig {
             public void run(String... args) throws Exception {
                 try {
                     final TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-                    botsApi.registerBot(telegramBot);
+                    botsApi.registerBot(telegramPollingBot);
 
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
