@@ -100,7 +100,7 @@ public class SpringBatchConfig {
     public ItemWriter<List<Message>> vacancyWriter(){
         return new VacancyWriter();
     }
-    @Bean
+
     public CommandLineRunner schedulingRunner() {
         return new CommandLineRunner() {
             public void run(String... args) throws Exception {

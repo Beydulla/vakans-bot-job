@@ -29,7 +29,7 @@ public class FilterVacanciesProcessor implements ItemProcessor<List<Vacancy>, Li
         final List<Message> messageList = new ArrayList<>();
         for(final Filter filter : filterList){
             LOGGER.info("Checking match with filter: {}", filter.toString());
-            final String[] arrayTag = filter.getTagsAsArray();
+            final String[] arrayTag = filter.getTrimmedTagsAsArray();
             for(final Vacancy vacancy : vacancies){
                 if(hasMatch(vacancy, filter, arrayTag)){
                     final Message message = Message.builder()

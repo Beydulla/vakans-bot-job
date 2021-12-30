@@ -19,7 +19,7 @@ public class BossAzService implements WebsiteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BossAzService.class);
 
-    private LastVacancyDao lastVacancyDao;
+    private final LastVacancyDao lastVacancyDao;
 
     private final static String WEBSITE_URL = "https://boss.az";
     private final static String VACANCIES_URL = "https://boss.az/vacancies";

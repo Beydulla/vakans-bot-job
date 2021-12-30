@@ -2,6 +2,7 @@ package com.vakans.bot.job.batch.data;
 
 import lombok.Data;
 
+import java.util.Arrays;
 
 
 @Data
@@ -15,8 +16,10 @@ public class Filter {
     private long telegramChatId;
 
 
-    public String[] getTagsAsArray(){
-        return tags.split(",");
+    public String[] getTrimmedTagsAsArray(){
+        final String[] array = tags.split(",");
+        Arrays.parallelSetAll(array, (i) -> array[i].trim());
+        return array;
     }
 
 }
