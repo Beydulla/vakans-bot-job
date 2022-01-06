@@ -4,22 +4,27 @@ import com.vakans.bot.job.batch.dao.LastVacancyDao;
 import com.vakans.bot.job.batch.dao.LastVacancyDaoImpl;
 import com.vakans.bot.job.batch.data.LastVacancy;
 import com.vakans.bot.job.batch.data.Vacancy;
+import com.vakans.bot.job.batch.data.constants.WebsiteName;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class BossAzService implements WebsiteService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BossAzService.class);
 
-    private final LastVacancyDao lastVacancyDao;
+    @Autowired
+    private LastVacancyDao lastVacancyDao;
 
     private final static String WEBSITE_URL = "https://boss.az";
     private final static String VACANCIES_URL = "https://boss.az/vacancies";
@@ -29,10 +34,6 @@ public class BossAzService implements WebsiteService {
     private final static String DESCRIPTION_ID = ".results-i-summary";
     private final static String ELEMENTS_ID = ".results-i";
     private final static String LINK_ID = ".results-i-link";
-
-    public BossAzService(final LastVacancyDao lastVacancyDao){
-        this.lastVacancyDao = lastVacancyDao;
-    }
 
     @Override
     public List<Vacancy> getNewVacancies() {
@@ -63,7 +64,6 @@ public class BossAzService implements WebsiteService {
         return vacancies;
     }
 
-
     private static Vacancy elementToVacancy(final Element element){
         final Vacancy vacancy = new Vacancy();
         vacancy.setTitle(element.select(TITLE_ID).text());
@@ -86,5 +86,9 @@ public class BossAzService implements WebsiteService {
         return vacancy;
     }
 
+    @Override
+    public WebsiteName getName() {
+        return WebsiteName.BOSS_AZ;
+    }
 
 }

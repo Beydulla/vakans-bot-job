@@ -3,17 +3,20 @@ package com.vakans.bot.job.batch.service.website;
 import com.vakans.bot.job.batch.dao.LastVacancyDao;
 import com.vakans.bot.job.batch.data.LastVacancy;
 import com.vakans.bot.job.batch.data.Vacancy;
+import com.vakans.bot.job.batch.data.constants.WebsiteName;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class JobSearchService implements WebsiteService{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobSearchService.class);
@@ -21,7 +24,8 @@ public class JobSearchService implements WebsiteService{
     private LastVacancyDao lastVacancyDao;
 
     private final static String WEBSITE_URL = "https://www.jobsearch.az/";
-    private final static String ELEMENTS_ID = "body > table > tbody > tr:nth-child(3) > td > table > tbody > tr > td:nth-child(2) > table > tbody > tr > td:nth-child(1) > table > tbody > tr:nth-child(3) > td > table > tbody";
+    private final static String VACANCIES_URL = "https://jobsearch.az/vacancies";
+    private final static String ELEMENTS_ID = ".list__scroller";
     private final static String TITLE_ID = "td:nth-child(1) > a.hotv_text";
     private final static String COMPANY_ID = "td:nth-child(2)";
     private final static String SALARY_ID = ".results-i-salary";
@@ -36,7 +40,8 @@ public class JobSearchService implements WebsiteService{
     public List<Vacancy> getNewVacancies() {
         final List<Vacancy> vacancies = new ArrayList<>();
         try {
-            final Document doc = Jsoup.connect(WEBSITE_URL).get();
+            final Document doc = Jsoup.connect(VACANCIES_URL).get();
+            System.out.println(doc);
             final Elements elements = doc.select(ELEMENTS_ID);
             elements.remove(0);
             final LastVacancy lastVacancy = lastVacancyDao.getLastVacancyByWebsite(WEBSITE_URL);
@@ -69,5 +74,10 @@ public class JobSearchService implements WebsiteService{
         vacancy.setCompany(element.select(COMPANY_ID).text());
         vacancy.setVacancyLink(WEBSITE_URL + element.select(TITLE_ID).attr("href"));
         return vacancy;
+    }
+
+    @Override
+    public WebsiteName getName() {
+        return WebsiteName.JOBSEARCH_AZ;
     }
 }

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TelegramServiceImpl implements TelegramService{
@@ -34,6 +34,8 @@ public class TelegramServiceImpl implements TelegramService{
 
     @Override
     public void sendMessage(final long chatId, final String message) {
+        Set set = new HashSet();
+        Map map = new HashMap();
         final SendMessage request = new SendMessage(chatId, message)
                 .parseMode(ParseMode.HTML);
         telegramBot.execute(request);
