@@ -22,6 +22,8 @@ import org.springframework.batch.item.support.CompositeItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
+
 import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +67,7 @@ public class SpringBatchConfig {
         return new JdbcCursorItemReaderBuilder<Website>()
                 .name("websiteListDbReader")
                 .dataSource(dataSource)
-                .sql("SELECT * FROM WEBSITE")
+                .sql("SELECT * FROM WEBSITE WHERE ACTIVE = 1")
                 .rowMapper(new WebsiteMapper())
                 .build();
     }
@@ -92,4 +94,8 @@ public class SpringBatchConfig {
         return new VacancyWriter();
     }
 
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }

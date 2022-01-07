@@ -46,9 +46,9 @@ public class FilterVacanciesProcessor implements ItemProcessor<List<Vacancy>, Li
     private boolean hasMatch(final Vacancy vacancy, final Filter filter, final String[] tags){
         return Arrays.stream(tags).anyMatch(tag ->
                 vacancy.getTitle().toLowerCase().contains(tag.toLowerCase())
-                || vacancy.getDescription().toLowerCase().contains(tag.toLowerCase()))
-                && (vacancy.getMinimumSalary() >= filter.getMinimumSalary() ||
-                vacancy.getMaximumSalary() >= filter.getMinimumSalary()) &&
+                || (vacancy.getDescription() != null && vacancy.getDescription().toLowerCase().contains(tag.toLowerCase())))
+                && ((vacancy.getMinimumSalary() == 0 || vacancy.getMinimumSalary() >= filter.getMinimumSalary()) ||
+                (vacancy.getMaximumSalary() == 0 || vacancy.getMaximumSalary() >= filter.getMinimumSalary())) &&
                 (filter.getCompany() == null || filter.getCompany().isEmpty()
                         || vacancy.getCompany().equalsIgnoreCase(filter.getCompany()));
     }
