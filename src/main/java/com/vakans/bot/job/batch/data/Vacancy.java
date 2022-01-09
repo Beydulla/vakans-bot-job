@@ -11,4 +11,15 @@ public class Vacancy {
     private int maximumSalary;
     private String vacancyLink;
 
+
+    @Override
+    public String toString() {
+        return "Vacancy{" +
+                "title='" + title + '\'' +
+                ", company='" + company + '\'' +
+                ", minimumSalary=" + minimumSalary +
+                ", maximumSalary=" + maximumSalary +
+                ", vacancyLink='" + vacancyLink + '\'' +
+                '}';
+    }
 }

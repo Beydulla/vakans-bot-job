@@ -80,6 +80,7 @@ public class JobSearchService implements WebsiteService{
         final Vacancy vacancy = new Vacancy();
         vacancy.setTitle(jobSearchDTO.getTitle());
         vacancy.setVacancyLink(VACANCIES_URL + "/" + jobSearchDTO.getSlug());
+        vacancy.setCompany(jobSearchDTO.getCompany().get("title"));
         pause(15_000);
         vacancy.setDescription(getJobDescription(jobSearchDTO));
         return vacancy;

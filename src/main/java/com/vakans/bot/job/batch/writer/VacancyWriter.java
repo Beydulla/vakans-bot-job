@@ -18,7 +18,7 @@ public class VacancyWriter implements ItemWriter<List<Message>> {
     private TelegramService telegramService;
 
     @Override
-    public void write(List<? extends List<Message>> messageList) throws Exception {
+    public void write(List<? extends List<Message>> messageList) {
         for(final List<Message> messages : messageList){
             for(final Message message : messages){
                 telegramService.sendMessage(message.getTelegramChatId(), generateMessage(message.getVacancy()));
