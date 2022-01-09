@@ -3,12 +3,16 @@ package com.vakans.bot.job.batch.writer;
 import com.vakans.bot.job.batch.data.Message;
 import com.vakans.bot.job.batch.data.Vacancy;
 import com.vakans.bot.job.batch.service.TelegramService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class VacancyWriter implements ItemWriter<List<Message>> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VacancyWriter.class);
 
     @Autowired
     private TelegramService telegramService;
@@ -24,6 +28,7 @@ public class VacancyWriter implements ItemWriter<List<Message>> {
 
 
     private String generateMessage(final Vacancy vacancy){
+        LOGGER.info("Generated message for job title: {}", vacancy.getTitle());
         return "Title: " + vacancy.getTitle() + "\n" +
             "Company: " + vacancy.getCompany() + "\n" +
             "Salary: " + vacancy.getMinimumSalary() + " - " + vacancy.getMaximumSalary() + "\n" +

@@ -22,9 +22,6 @@ public class Scheduler {
     @Autowired
     private Job vacancyJob;
 
-    @Autowired
-    private WebsiteFactory websiteFactory;
-
     @Scheduled(cron = "0 0/30 * * * ?")
     public void run(){
         try {

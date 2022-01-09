@@ -39,7 +39,7 @@ public class FilterVacanciesProcessor implements ItemProcessor<List<Vacancy>, Li
                 }
             }
         }
-        LOGGER.info("{} message generated", messageList.size());
+        LOGGER.info("{} messages generated", messageList.size());
         return messageList;
     }
 
