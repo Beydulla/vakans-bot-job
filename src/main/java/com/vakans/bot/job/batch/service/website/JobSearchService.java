@@ -35,7 +35,7 @@ public class JobSearchService implements WebsiteService{
     private final static String WEBSITE_URL = "https://jobsearch.az";
     private final static String VACANCIES_URL = "https://jobsearch.az/vacancies";
     private final static String GET_VACANCIES_URL = "https://jobsearch.az/api-az/vacancies-az?hl=az&q=&posted_date=&seniority=&categories=&industries=&order_by=";
-
+    private final static String VACANCIES_API_URL = "https://jobsearch.az/api-az/vacancies-az";
 
     @Override
     public List<Vacancy> getNewVacancies() {
@@ -63,12 +63,7 @@ public class JobSearchService implements WebsiteService{
     }
 
     private List<JobSearchDTO> getDTOArrayFromJobSearch() {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.add("x-requested-with", "XMLHttpRequest");
-        headers.add("Accept", "application/json");
-        final HttpEntity<String> entity = new HttpEntity<>("body", headers);
-
-        final JsonNode rootNode = restTemplate.exchange(GET_VACANCIES_URL, HttpMethod.GET, entity, JsonNode.class).getBody();
+        final JsonNode rootNode = sendGetRequest(GET_VACANCIES_URL);
         final JsonNode itemsNode = rootNode.get("items");
         final ObjectMapper mapper = new ObjectMapper();
         final ObjectReader reader = mapper.readerFor(new TypeReference<List<JobSearchDTO>>() {});
@@ -85,7 +80,31 @@ public class JobSearchService implements WebsiteService{
         final Vacancy vacancy = new Vacancy();
         vacancy.setTitle(jobSearchDTO.getTitle());
         vacancy.setVacancyLink(VACANCIES_URL + "/" + jobSearchDTO.getSlug());
+        pause(15_000);
+        vacancy.setDescription(getJobDescription(jobSearchDTO));
         return vacancy;
+    }
+
+    private String getJobDescription(final JobSearchDTO jobSearchDTO){
+        final JsonNode rootNode = sendGetRequest(VACANCIES_API_URL + "/" + jobSearchDTO.getSlug());
+        return rootNode.get("text").textValue();
+    }
+
+    private JsonNode sendGetRequest(final String url){
+        final HttpHeaders headers = new HttpHeaders();
+        headers.add("x-requested-with", "XMLHttpRequest");
+        headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36");
+        final HttpEntity<String> entity = new HttpEntity<>("body", headers);
+        return restTemplate.exchange(url, HttpMethod.GET, entity, JsonNode.class).getBody();
+    }
+
+    public void pause(int ms){
+        try {
+            LOGGER.info("paused Thread {} milliseconds", ms);
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

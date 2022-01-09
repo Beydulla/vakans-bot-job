@@ -1,7 +1,6 @@
 package com.vakans.bot.job.batch.service.website;
 
 import com.vakans.bot.job.batch.dao.LastVacancyDao;
-import com.vakans.bot.job.batch.dao.LastVacancyDaoImpl;
 import com.vakans.bot.job.batch.data.LastVacancy;
 import com.vakans.bot.job.batch.data.Vacancy;
 import com.vakans.bot.job.batch.data.constants.WebsiteName;
