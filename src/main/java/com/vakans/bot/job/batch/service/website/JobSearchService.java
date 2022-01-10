@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +51,16 @@ public class JobSearchService implements WebsiteService{
     }
 
     private void deleteDuplicateVacancies(final List<JobSearchDTO> jobSearchDTOList){
+        LOGGER.info("Deleting duplicate vacancies. Vacancy count before deletion: {}", jobSearchDTOList.size());
         final List<String> vacancyLinkList = generalDao.getLatestVacanciesByWebsite(this.getName());
         jobSearchDTOList.removeIf(jobSearchDTO -> vacancyLinkList.contains(getVacancyLink(jobSearchDTO)));
-
+        jobSearchDTOList.removeIf(dto -> dto.getCreatedAt().substring(0, 10).equals(LocalDate.now().minusDays(1).toString()));
+        LOGGER.info("Deleted duplicate vacancies. Vacancy count after deletion: {}", jobSearchDTOList.size());
     }
 
     private List<JobSearchDTO> getNewDTOArrayFromJobSearch() {
         final JsonNode rootNode = sendGetRequest(GET_VACANCIES_URL);
+        LOGGER.info("Data fetched successfully.");
         final JsonNode itemsNode = rootNode.get("items");
         final ObjectMapper mapper = new ObjectMapper();
         final ObjectReader reader = mapper.readerFor(new TypeReference<List<JobSearchDTO>>() {});
@@ -75,7 +79,7 @@ public class JobSearchService implements WebsiteService{
         vacancy.setTitle(jobSearchDTO.getTitle());
         vacancy.setVacancyLink(getVacancyLink(jobSearchDTO));
         vacancy.setCompany(jobSearchDTO.getCompany().get("title"));
-        pause(5_000);
+        pause(15_000);
         vacancy.setDescription(getJobDescription(jobSearchDTO));
         return vacancy;
     }
